@@ -10,9 +10,10 @@ export const useVideoContext = () => {
 
 export const VideoProvider = ({ children }) => {
   const [videoId, setVideoId] = useState(null);
+  const playList = plalist.categories[0].videos;
 
   return (
-    <VideoContext.Provider value={{ videoId, setVideoId, plalist }}>
+    <VideoContext.Provider value={{ videoId, setVideoId, playList }}>
       {children}
     </VideoContext.Provider>
   );

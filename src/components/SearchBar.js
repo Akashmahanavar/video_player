@@ -1,9 +1,10 @@
-import { plalist } from "@/data/playlistData";
+import { useVideoContext } from "@/utils/video-context";
 import React, { memo } from "react";
 
 function SearchBar({ setSearchMovies }) {
+  const { playList } = useVideoContext();
   function handleInputChange(searchString) {
-    let searchList = plalist.categories[0].videos.filter((data) =>
+    let searchList = playList.filter((data) =>
       data.title.toLowerCase().includes(searchString.toLowerCase())
     );
     setSearchMovies(searchList);

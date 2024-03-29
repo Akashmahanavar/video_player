@@ -12,8 +12,9 @@ function VideoCard() {
   const [duration, setDuration] = useState(["00", "00"]);
   const [currentSpeed, setCurrentSpeed] = useState(playBackSpeed[0]);
   const [volume, setVolume] = useState(1);
-  const { videoId } = useVideoContext();
+  const { videoId, setVideoId, playList } = useVideoContext();
   const [controls, setControls] = useState(true);
+  const [autoPlay, setAutoPlay] = useState(true);
   useEffect(() => {
     if (videoId === null) {
       redirect("/");
@@ -86,7 +87,16 @@ function VideoCard() {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
-
+  useEffect(() => {
+    if (currentTimeSec === videoId.duration) {
+      if (autoPlay) {
+        let index = playList.indexOf(videoId);
+        setVideoId(playList[++index]);
+      } else {
+        videoRef.current.play();
+      }
+    }
+  }, [currentTimeSec]);
   return (
     <div className="relative w-[90%] max-w-[1000px] text-white z-0">
       <video
@@ -118,7 +128,7 @@ function VideoCard() {
           step="any"
           onChange={(e) => (videoRef.current.currentTime = e.target.value)}
         />
-        <div className="flex justify-between w-[100%]">
+        <div className="flex justify-between items-center w-[100%]">
           <div className="flex items-center">
             <button
               onClick={() => togglePlay()}
@@ -141,7 +151,13 @@ function VideoCard() {
               title="Volume"
             />
           </div>
-          <div>
+          <div className="flex items-center gap-1">
+            <label>AutoPlay</label>
+            <input
+              type="checkbox"
+              checked={autoPlay}
+              onChange={() => setAutoPlay((prev) => !prev)}
+            />
             <button onClick={() => playOnFullScreen()} title="fullscreen">
               {"[ ]"}
             </button>
