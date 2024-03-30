@@ -5,10 +5,11 @@ import React, { memo } from "react";
 
 function CurrentPlayListCard({ data }) {
   const { videoId, setVideoId } = useVideoContext();
+  const selected = videoId?.id === data.id;
   return (
     <div
       className={`relative flex felx-row min-h-[120px] w-[90%] gap-2 rounded-lg max-w-[450px] bg-white cursor-pointer hover:bg-slate-200 p-2 ${
-        videoId?.id === data.id ? "bg-slate-300" : ""
+        selected ? "bg-slate-300" : ""
       }`}
       onClick={() => setVideoId(data)}
     >

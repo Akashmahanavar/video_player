@@ -97,7 +97,7 @@ function VideoCard() {
         videoRef.current.play();
       }
     }
-  }, [currentTimeSec, autoPlay]);
+  }, [currentTimeSec, autoPlay, videoId, setVideoId, playList]);
   return (
     <div className="relative w-[90%] max-w-[1000px] text-white z-0">
       <video
