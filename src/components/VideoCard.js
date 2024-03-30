@@ -31,7 +31,7 @@ function VideoCard() {
       const { min, sec } = secToMin(videoRef?.current?.currentTime);
       setCurrentTimeSec(videoRef?.current?.currentTime);
       setCurrentTime([min, sec]);
-    }, 1000);
+    }, 1);
     return () => clearInterval(interval);
   }, [videoId]);
 
@@ -91,12 +91,13 @@ function VideoCard() {
     if (currentTimeSec === videoId.duration) {
       if (autoPlay) {
         let index = playList.indexOf(videoId);
-        setVideoId(playList[++index]);
+        if (index < playList.length - 1) setVideoId(playList[++index]);
+        else setVideoId(playList[0]);
       } else {
         videoRef.current.play();
       }
     }
-  }, [currentTimeSec]);
+  }, [currentTimeSec, autoPlay]);
   return (
     <div className="relative w-[90%] max-w-[1000px] text-white z-0">
       <video
@@ -152,12 +153,18 @@ function VideoCard() {
             />
           </div>
           <div className="flex items-center gap-1">
-            <label>AutoPlay</label>
-            <input
-              type="checkbox"
-              checked={autoPlay}
-              onChange={() => setAutoPlay((prev) => !prev)}
-            />
+            <label className="inline-flex items-center cursor-pointer">
+              <span className="me-[6px] text-sm font-medium text-gray-900 dark:text-gray-300">
+                AutoPlay
+              </span>
+              <input
+                type="checkbox"
+                className="sr-only peer"
+                checked={autoPlay}
+                onChange={() => setAutoPlay((prev) => !prev)}
+              />
+              <div className="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-teal-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600"></div>
+            </label>
             <button onClick={() => playOnFullScreen()} title="fullscreen">
               {"[ ]"}
             </button>
